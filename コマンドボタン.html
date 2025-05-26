@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BLE Control</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <button id="dimmingButton">Dimming</button>
+    <button id="toggleButton">Toggle</button>
+    <button id="onButton">On</button>
+    <button id="offButton">Off</button>
+    <button id="connectButton">BLE_connect</button>
+
+    <script>
+        let device;
+        let characteristic;
+
+	const SERVICE_UUID='00001234-0000-1000-8000-00805f9b34fb'
+	const CHARACTERISTIC_UUID='00005678-0000-1000-8000-00805f9b34fb'
+
+        async function connectBLE() {
+            try {
+                device = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true,
+                    optionalServices: [SERVICE_UUID] // サービスUUIDを指定
+                });
+
+                const server = await device.gatt.connect();
+                const service = await server.getPrimaryService(SERVICE_UUID);
+                characteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+
+                console.log("BLEデバイスに接続しました");
+		console.log("BLEデバイスに接続完了",characteristic);
+            } catch (error) {
+                console.error("BLE接続エラー:", error.message);
+            }
+        }
+
+        async function sendCommand(command) {
+            if (!characteristic) {
+                console.error("BLEデバイスが接続されていません");
+                return;
+            }
+            const encoder = new TextEncoder();
+            await characteristic.writeValue(encoder.encode(command));
+            console.log(`送信: ${command}`);
+        }
+
+        document.getElementById("dimmingButton").addEventListener("click", () => sendCommand("dimming"));
+        document.getElementById("toggleButton").addEventListener("click", () => sendCommand("toggle"));
+        document.getElementById("onButton").addEventListener("click", () => sendCommand("on"));
+        document.getElementById("offButton").addEventListener("click", () => sendCommand("off"));
+        document.getElementById("connectButton").addEventListener("click", () => connectBLE());
+
+    </script>
+</body>
+</html>
