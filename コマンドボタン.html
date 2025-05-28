@@ -3,6 +3,23 @@
 <head>
     <title>BLE Control</title>
     <meta charset="UTF-8">
+    <style>
+        button {
+            width: 150px;
+            height: 60px;
+            font-size: 18px;
+            border-radius: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
     <button id="dimmingButton">Dimming</button>
@@ -15,14 +32,14 @@
         let device;
         let characteristic;
 
-	const SERVICE_UUID='00001234-0000-1000-8000-00805f9b34fb'
-	const CHARACTERISTIC_UUID='00005678-0000-1000-8000-00805f9b34fb'
+        const SERVICE_UUID = '00001234-0000-1000-8000-00805f9b34fb';
+        const CHARACTERISTIC_UUID = '00005678-0000-1000-8000-00805f9b34fb';
 
         async function connectBLE() {
             try {
                 device = await navigator.bluetooth.requestDevice({
                     acceptAllDevices: true,
-                    optionalServices: [SERVICE_UUID] // サービスUUIDを指定
+                    optionalServices: [SERVICE_UUID]
                 });
 
                 const server = await device.gatt.connect();
@@ -30,7 +47,7 @@
                 characteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
                 console.log("BLEデバイスに接続しました");
-		console.log("BLEデバイスに接続完了",characteristic);
+                console.log("BLEデバイスに接続完了", characteristic);
             } catch (error) {
                 console.error("BLE接続エラー:", error.message);
             }
