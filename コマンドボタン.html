@@ -42,7 +42,6 @@
 <body>
     <button id="dimmingButton">Dimming</button>
     <button id="toggleButton">Toggle</button>
-    <button id="onButton">On</button>
     <button id="offButton">Off</button>
     <button id="connectButton">BLE_connect</button>
 
@@ -83,7 +82,6 @@
 
         document.getElementById("dimmingButton").addEventListener("click", () => sendCommand("dimming"));
         document.getElementById("toggleButton").addEventListener("click", () => sendCommand("toggle"));
-        document.getElementById("onButton").addEventListener("click", () => sendCommand("on"));
         document.getElementById("offButton").addEventListener("click", () => sendCommand("off"));
         document.getElementById("connectButton").addEventListener("click", () => connectBLE());
 
